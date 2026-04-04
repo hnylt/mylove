@@ -22,20 +22,21 @@
       background: rgba(0,0,0,0.7);
       backdrop-filter: blur(10px);
       box-shadow: 0 0 30px rgba(147,51,234,0.4);
-      transition: all 0.5s ease;
+      animation: fadeIn 0.5s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px);}
+      to { opacity: 1; transform: translateY(0);}
     }
 
     h1 { color: #c084fc; }
 
-    input, button {
+    button {
       padding: 12px;
-      width: 70%;
       margin: 10px;
       border-radius: 10px;
       border: none;
-    }
-
-    button {
       background: #7c3aed;
       color: white;
       cursor: pointer;
@@ -48,63 +49,73 @@
     }
 
     .small-btn {
-      width: auto;
-      padding: 8px 15px;
+      padding: 6px 12px;
       font-size: 12px;
       background: #444;
     }
 
     .hidden { display: none; }
 
-    /* ❤️ FLOATING HEARTS */
+    /* ❤️ HEARTS */
     .heart {
       position: fixed;
       color: red;
       animation: floatUp 6s linear infinite;
-      opacity: 0.7;
-      z-index: 1;
     }
 
     @keyframes floatUp {
-      from { transform: translateY(100vh); }
-      to { transform: translateY(-10vh); }
+      from { transform: translateY(100vh);}
+      to { transform: translateY(-10vh);}
     }
 
     /* 🎁 GRID */
     .grid {
       display: grid;
       grid-template-columns: repeat(2,1fr);
-      gap: 20px;
+      gap: 15px;
     }
 
     .card {
+      padding: 25px;
       background: #1e1e2f;
-      padding: 30px;
       border-radius: 15px;
       cursor: pointer;
-      transition: 0.4s;
-      box-shadow: 0 0 10px rgba(147,51,234,0.3);
+      transition: 0.3s;
     }
 
     .card:hover {
-      transform: scale(1.1) rotate(2deg);
-      box-shadow: 0 0 30px #a855f7;
+      transform: scale(1.1);
+      box-shadow: 0 0 25px #a855f7;
     }
 
-    /* 🎁 OPEN EFFECT */
-    .open {
-      animation: openCard 0.5s forwards;
-    }
-
-    @keyframes openCard {
-      0% { transform: scale(1); }
-      100% { transform: scale(1.3); opacity: 0; }
-    }
-
+    /* 🖼️ PHOTO ANIMATION */
     img {
       width: 100%;
       border-radius: 15px;
       margin-top: 10px;
+      opacity: 0;
+      transform: scale(0.9);
+      animation: showImg 1s forwards;
+    }
+
+    img:nth-child(2){ animation-delay:0.2s;}
+    img:nth-child(3){ animation-delay:0.4s;}
+    img:nth-child(4){ animation-delay:0.6s;}
+    img:nth-child(5){ animation-delay:0.8s;}
+    img:nth-child(6){ animation-delay:1s;}
+
+    @keyframes showImg {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* 🔢 PIN KEYPAD */
+    .keypad button {
+      width: 60px;
+      height: 60px;
+      font-size: 18px;
     }
   </style>
 </head>
@@ -118,16 +129,10 @@
     h.className="heart";
     h.innerHTML="❤️";
     h.style.left=Math.random()*100+"vw";
-    h.style.fontSize=(Math.random()*20+10)+"px";
     document.body.appendChild(h);
     setTimeout(()=>h.remove(),6000);
   },300);
 </script>
-
-<!-- 🔊 CLICK SOUND -->
-<audio id="clickSound">
-  <source src="click.mp3" type="audio/mpeg">
-</audio>
 
 <!-- LOGIN -->
 <div class="container" id="loginPage">
@@ -135,16 +140,14 @@
   <p>Enter our callsign</p>
   <input type="password" id="password">
   <button onclick="login()">Enter</button>
-  <p id="error" style="color:red;"></p>
 </div>
 
 <!-- GREETING -->
 <div class="container hidden" id="greetPage">
   <h1>Hi my love 💜</h1>
   <p>Do you want to see your gift?</p>
-
   <button onclick="goMenu()">Yes please 💜</button>
-  <button onclick="forceYes()">No thanks</button>
+  <button onclick="alert('No choice 😭💜')">No thanks</button>
 </div>
 
 <!-- MENU -->
@@ -152,10 +155,10 @@
   <h1>These are for you ❤️</h1>
 
   <div class="grid">
-    <div class="card" onclick="openPage(this,'photos')">📸 Photos</div>
-    <div class="card" onclick="openPage(this,'letter')">💌 Letter</div>
-    <div class="card" onclick="openPage(this,'song')">🎵 Song</div>
-    <div class="card" onclick="openPage(this,'special')">🔐 Special</div>
+    <div class="card" onclick="openPage('photos')">📸 Photos</div>
+    <div class="card" onclick="openPage('letter')">💌 Letter</div>
+    <div class="card" onclick="openPage('song')">🎵 Song</div>
+    <div class="card" onclick="openPage('special')">🔐 Special</div>
   </div>
 </div>
 
@@ -163,9 +166,15 @@
 <div class="container hidden" id="photos">
   <h1>Our Memories 💜</h1>
 
-  <img src="pic1.jpg"><img src="pic2.jpg"><img src="pic3.jpg">
-  <img src="pic4.jpg"><img src="pic5.jpg"><img src="pic6.jpg">
-  <img src="pic7.jpg"><img src="pic8.jpg"><img src="pic9.jpg">
+  <img src="pic1.jpg">
+  <img src="pic2.jpg">
+  <img src="pic3.jpg">
+  <img src="pic4.jpg">
+  <img src="pic5.jpg">
+  <img src="pic6.jpg">
+  <img src="pic7.jpg">
+  <img src="pic8.jpg">
+  <img src="pic9.jpg">
   <img src="pic10.jpg">
 
   <audio autoplay loop>
@@ -179,17 +188,15 @@
 <div class="container hidden" id="letter">
   <h1>My Love Letter 💜</h1>
   <p>Your message here 💜</p>
-
   <button class="small-btn" onclick="goBack()">Return</button>
 </div>
 
 <!-- SONG -->
 <div class="container hidden" id="song">
   <h1>Our Song 💜</h1>
-
   <img src="songpic.jpg">
 
-  <audio autoplay loop>
+  <audio id="songAudio">
     <source src="song.mp3">
   </audio>
 
@@ -207,74 +214,79 @@
 <div class="container hidden" id="pinPage">
   <h1>Enter PIN 🔐</h1>
   <p>Clue: today's date 💜</p>
-  <input type="password" id="pin">
-  <button onclick="checkPin()">Unlock</button>
+
+  <p id="pinDisplay">----</p>
+
+  <div class="keypad">
+    <button onclick="press(1)">1</button>
+    <button onclick="press(2)">2</button>
+    <button onclick="press(3)">3</button><br>
+    <button onclick="press(4)">4</button>
+    <button onclick="press(5)">5</button>
+    <button onclick="press(6)">6</button><br>
+    <button onclick="press(7)">7</button>
+    <button onclick="press(8)">8</button>
+    <button onclick="press(9)">9</button><br>
+    <button onclick="clearPin()">C</button>
+    <button onclick="press(0)">0</button>
+  </div>
 </div>
 
 <!-- FINAL -->
 <div class="container hidden" id="finalPage">
-  <button onclick="showFinal()">Tap 💜</button>
-  <p id="finalText" class="hidden">
-    Marked this day as our anniversary 💜
-  </p>
-
+  <h1>💜</h1>
+  <p>Marked this day as our anniversary 💜</p>
   <button class="small-btn" onclick="goBack()">Return</button>
 </div>
 
 <script>
-  function clickSound(){
-    document.getElementById("clickSound").play();
-  }
+  let pinInput="";
 
   function login(){
-    clickSound();
     if(password.value==="love"){
       loginPage.classList.add("hidden");
       greetPage.classList.remove("hidden");
-    } else error.innerText="Wrong 💔";
+    }
   }
 
   function goMenu(){
-    clickSound();
     greetPage.classList.add("hidden");
     menuPage.classList.remove("hidden");
   }
 
-  function forceYes(){
-    alert("You have no choice 😭💜");
-  }
+  function openPage(page){
+    document.querySelectorAll('.container').forEach(el=>el.classList.add("hidden"));
+    document.getElementById(page).classList.remove("hidden");
 
-  function openPage(el,page){
-    clickSound();
-    el.classList.add("open");
-    setTimeout(()=>{
-      menuPage.classList.add("hidden");
-      document.getElementById(page).classList.remove("hidden");
-    },400);
+    if(page==="song"){
+      document.getElementById("songAudio").play();
+    }
   }
 
   function goBack(){
-    clickSound();
     document.querySelectorAll('.container').forEach(el=>el.classList.add("hidden"));
     menuPage.classList.remove("hidden");
   }
 
   function showPin(){
-    clickSound();
     special.classList.add("hidden");
     pinPage.classList.remove("hidden");
   }
 
-  function checkPin(){
-    clickSound();
-    if(pin.value==="0408"){
+  function press(num){
+    if(pinInput.length<4){
+      pinInput+=num;
+      document.getElementById("pinDisplay").innerText=pinInput;
+    }
+    if(pinInput==="0408"){
       pinPage.classList.add("hidden");
       finalPage.classList.remove("hidden");
     }
   }
 
-  function showFinal(){
-    finalText.classList.remove("hidden");
+  function clearPin(){
+    pinInput="";
+    document.getElementById("pinDisplay").innerText="----";
   }
 </script>
 
