@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <title>For You 💜</title>
@@ -11,21 +11,25 @@
       background: linear-gradient(to bottom, #0f0c29, #302b63, #000);
       color: white;
       text-align: center;
+      overflow-x: hidden;
     }
 
     .container {
       max-width: 700px;
       margin: 50px auto;
-      background: rgba(0,0,0,0.75);
       padding: 25px;
       border-radius: 20px;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 30px rgba(147,51,234,0.4);
+      transition: all 0.5s ease;
     }
 
     h1 { color: #c084fc; }
 
     input, button {
       padding: 12px;
-      width: 80%;
+      width: 70%;
       margin: 10px;
       border-radius: 10px;
       border: none;
@@ -35,27 +39,66 @@
       background: #7c3aed;
       color: white;
       cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      background: #a78bfa;
+    }
+
+    .small-btn {
+      width: auto;
+      padding: 8px 15px;
+      font-size: 12px;
+      background: #444;
     }
 
     .hidden { display: none; }
 
-    /* 🎁 OPTIONS GRID */
+    /* ❤️ FLOATING HEARTS */
+    .heart {
+      position: fixed;
+      color: red;
+      animation: floatUp 6s linear infinite;
+      opacity: 0.7;
+      z-index: 1;
+    }
+
+    @keyframes floatUp {
+      from { transform: translateY(100vh); }
+      to { transform: translateY(-10vh); }
+    }
+
+    /* 🎁 GRID */
     .grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-      margin-top: 20px;
+      grid-template-columns: repeat(2,1fr);
+      gap: 20px;
     }
 
     .card {
       background: #1e1e2f;
-      padding: 20px;
+      padding: 30px;
       border-radius: 15px;
       cursor: pointer;
+      transition: 0.4s;
+      box-shadow: 0 0 10px rgba(147,51,234,0.3);
     }
 
     .card:hover {
-      background: #7c3aed;
+      transform: scale(1.1) rotate(2deg);
+      box-shadow: 0 0 30px #a855f7;
+    }
+
+    /* 🎁 OPEN EFFECT */
+    .open {
+      animation: openCard 0.5s forwards;
+    }
+
+    @keyframes openCard {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.3); opacity: 0; }
     }
 
     img {
@@ -63,15 +106,28 @@
       border-radius: 15px;
       margin-top: 10px;
     }
-
-    .back {
-      margin-top: 20px;
-      background: #444;
-    }
   </style>
 </head>
 
 <body>
+
+<!-- ❤️ HEARTS -->
+<script>
+  setInterval(()=>{
+    let h=document.createElement("div");
+    h.className="heart";
+    h.innerHTML="❤️";
+    h.style.left=Math.random()*100+"vw";
+    h.style.fontSize=(Math.random()*20+10)+"px";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),6000);
+  },300);
+</script>
+
+<!-- 🔊 CLICK SOUND -->
+<audio id="clickSound">
+  <source src="click.mp3" type="audio/mpeg">
+</audio>
 
 <!-- LOGIN -->
 <div class="container" id="loginPage">
@@ -82,131 +138,143 @@
   <p id="error" style="color:red;"></p>
 </div>
 
-<!-- MAIN MENU -->
+<!-- GREETING -->
+<div class="container hidden" id="greetPage">
+  <h1>Hi my love 💜</h1>
+  <p>Do you want to see your gift?</p>
+
+  <button onclick="goMenu()">Yes please 💜</button>
+  <button onclick="forceYes()">No thanks</button>
+</div>
+
+<!-- MENU -->
 <div class="container hidden" id="menuPage">
-  <h1>THESE ARE FOR YOU ❤️</h1>
-  <p>I hope you like it… I love you 💜</p>
+  <h1>These are for you ❤️</h1>
 
   <div class="grid">
-    <div class="card" onclick="openPage('photos')">📸 Photos</div>
-    <div class="card" onclick="openPage('letter')">💌 Love Letter</div>
-    <div class="card" onclick="openPage('song')">🎵 Our Song</div>
-    <div class="card" onclick="openPage('special')">🔐 Special</div>
+    <div class="card" onclick="openPage(this,'photos')">📸 Photos</div>
+    <div class="card" onclick="openPage(this,'letter')">💌 Letter</div>
+    <div class="card" onclick="openPage(this,'song')">🎵 Song</div>
+    <div class="card" onclick="openPage(this,'special')">🔐 Special</div>
   </div>
 </div>
 
-<!-- 📸 PHOTOS PAGE -->
+<!-- PHOTOS -->
 <div class="container hidden" id="photos">
   <h1>Our Memories 💜</h1>
 
-  <img src="pic1.jpg">
-  <img src="pic2.jpg">
-  <img src="pic3.jpg">
-  <img src="pic4.jpg">
-  <img src="pic5.jpg">
-  <img src="pic6.jpg">
-  <img src="pic7.jpg">
-  <img src="pic8.jpg">
-  <img src="pic9.jpg">
+  <img src="pic1.jpg"><img src="pic2.jpg"><img src="pic3.jpg">
+  <img src="pic4.jpg"><img src="pic5.jpg"><img src="pic6.jpg">
+  <img src="pic7.jpg"><img src="pic8.jpg"><img src="pic9.jpg">
   <img src="pic10.jpg">
 
-  <audio controls autoplay loop>
+  <audio autoplay loop>
     <source src="music.mp3">
   </audio>
 
-  <button class="back" onclick="goBack()">Return 💜</button>
+  <button class="small-btn" onclick="goBack()">Return</button>
 </div>
 
-<!-- 💌 LETTER PAGE -->
+<!-- LETTER -->
 <div class="container hidden" id="letter">
   <h1>My Love Letter 💜</h1>
+  <p>Your message here 💜</p>
 
-  <p>
-    My love,
-    you are the best thing that ever happened to me...
-    I love you more than words can explain 💜
-  </p>
-
-  <audio controls>
-    <source src="voice.mp3">
-  </audio>
-
-  <button class="back" onclick="goBack()">Return 💜</button>
+  <button class="small-btn" onclick="goBack()">Return</button>
 </div>
 
-<!-- 🎵 SONG PAGE -->
+<!-- SONG -->
 <div class="container hidden" id="song">
   <h1>Our Song 💜</h1>
 
   <img src="songpic.jpg">
 
-  <audio controls autoplay loop>
+  <audio autoplay loop>
     <source src="song.mp3">
   </audio>
 
-  <button class="back" onclick="goBack()">Return 💜</button>
+  <button class="small-btn" onclick="goBack()">Return</button>
 </div>
 
-<!-- 🔐 SPECIAL PAGE -->
+<!-- SPECIAL -->
 <div class="container hidden" id="special">
   <h1>Special 💜</h1>
   <p>Do you want to continue?</p>
-
   <button onclick="showPin()">Yes 💜</button>
 </div>
 
 <!-- PIN -->
 <div class="container hidden" id="pinPage">
-  <h1>Enter PIN</h1>
+  <h1>Enter PIN 🔐</h1>
+  <p>Clue: today's date 💜</p>
   <input type="password" id="pin">
   <button onclick="checkPin()">Unlock</button>
 </div>
 
 <!-- FINAL -->
 <div class="container hidden" id="finalPage">
-  <h1>💜</h1>
-  <button onclick="showFinal()">Tap Me 💜</button>
+  <button onclick="showFinal()">Tap 💜</button>
   <p id="finalText" class="hidden">
     Marked this day as our anniversary 💜
   </p>
 
-  <button class="back" onclick="goBack()">Return 💜</button>
+  <button class="small-btn" onclick="goBack()">Return</button>
 </div>
 
 <script>
-  function login() {
-    if (document.getElementById("password").value === "love") {
-      document.getElementById("loginPage").classList.add("hidden");
-      document.getElementById("menuPage").classList.remove("hidden");
-    } else {
-      document.getElementById("error").innerText = "Wrong password 💔";
+  function clickSound(){
+    document.getElementById("clickSound").play();
+  }
+
+  function login(){
+    clickSound();
+    if(password.value==="love"){
+      loginPage.classList.add("hidden");
+      greetPage.classList.remove("hidden");
+    } else error.innerText="Wrong 💔";
+  }
+
+  function goMenu(){
+    clickSound();
+    greetPage.classList.add("hidden");
+    menuPage.classList.remove("hidden");
+  }
+
+  function forceYes(){
+    alert("You have no choice 😭💜");
+  }
+
+  function openPage(el,page){
+    clickSound();
+    el.classList.add("open");
+    setTimeout(()=>{
+      menuPage.classList.add("hidden");
+      document.getElementById(page).classList.remove("hidden");
+    },400);
+  }
+
+  function goBack(){
+    clickSound();
+    document.querySelectorAll('.container').forEach(el=>el.classList.add("hidden"));
+    menuPage.classList.remove("hidden");
+  }
+
+  function showPin(){
+    clickSound();
+    special.classList.add("hidden");
+    pinPage.classList.remove("hidden");
+  }
+
+  function checkPin(){
+    clickSound();
+    if(pin.value==="0408"){
+      pinPage.classList.add("hidden");
+      finalPage.classList.remove("hidden");
     }
   }
 
-  function openPage(page) {
-    document.getElementById("menuPage").classList.add("hidden");
-    document.getElementById(page).classList.remove("hidden");
-  }
-
-  function goBack() {
-    document.querySelectorAll('.container').forEach(el => el.classList.add("hidden"));
-    document.getElementById("menuPage").classList.remove("hidden");
-  }
-
-  function showPin() {
-    document.getElementById("special").classList.add("hidden");
-    document.getElementById("pinPage").classList.remove("hidden");
-  }
-
-  function checkPin() {
-    if (document.getElementById("pin").value === "0408") {
-      document.getElementById("pinPage").classList.add("hidden");
-      document.getElementById("finalPage").classList.remove("hidden");
-    }
-  }
-
-  function showFinal() {
-    document.getElementById("finalText").classList.remove("hidden");
+  function showFinal(){
+    finalText.classList.remove("hidden");
   }
 </script>
 
