@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
   <title>For You 💜</title>
@@ -56,7 +56,7 @@
 
     .hidden { display: none; }
 
-    /* ❤️ HEARTS */
+    /* ❤️ FLOATING HEARTS */
     .heart {
       position: fixed;
       color: red;
@@ -88,7 +88,7 @@
       box-shadow: 0 0 25px #a855f7;
     }
 
-    /* 🖼️ PHOTO ANIMATION */
+    /* 🖼️ IMAGE STYLE */
     img {
       width: 100%;
       border-radius: 15px;
@@ -97,12 +97,6 @@
       transform: scale(0.9);
       animation: showImg 1s forwards;
     }
-
-    img:nth-child(2){ animation-delay:0.2s;}
-    img:nth-child(3){ animation-delay:0.4s;}
-    img:nth-child(4){ animation-delay:0.6s;}
-    img:nth-child(5){ animation-delay:0.8s;}
-    img:nth-child(6){ animation-delay:1s;}
 
     @keyframes showImg {
       to { opacity: 1; transform: scale(1);}
@@ -119,7 +113,7 @@
 
 <body>
 
-<!-- 🎵 GLOBAL SONG PLAYER (PLAYS CONTINUOUSLY) -->
+<!-- 🎵 BACKGROUND SONG -->
 <audio id="bgSong" loop>
   <source src="song.mp3">
 </audio>
@@ -164,7 +158,17 @@
   </div>
 </div>
 
-<!-- PHOTOS -->
+<!-- 🎵 SONG PAGE -->
+<div class="container hidden" id="songPage">
+  <h1>Our Song 💜</h1>
+
+  <!-- THIS IS YOUR IMAGE -->
+  <img src="songpic.jpg">
+
+  <button class="small-btn" onclick="goBack()">Return</button>
+</div>
+
+<!-- 📸 PHOTOS -->
 <div class="container hidden" id="photos">
   <h1>Our Memories 💜</h1>
 
@@ -182,21 +186,21 @@
   <button class="small-btn" onclick="goBack()">Return</button>
 </div>
 
-<!-- LETTER -->
+<!-- 💌 LETTER -->
 <div class="container hidden" id="letter">
   <h1>My Love Letter 💜</h1>
   <p>Your message here 💜</p>
   <button class="small-btn" onclick="goBack()">Return</button>
 </div>
 
-<!-- SPECIAL -->
+<!-- 🔐 SPECIAL -->
 <div class="container hidden" id="special">
   <h1>Special 💜</h1>
   <p>Do you want to continue?</p>
   <button onclick="showPin()">Yes 💜</button>
 </div>
 
-<!-- PIN -->
+<!-- 🔢 PIN -->
 <div class="container hidden" id="pinPage">
   <h1>Enter PIN 🔐</h1>
   <p>Clue: today's date 💜</p>
@@ -218,7 +222,7 @@
   </div>
 </div>
 
-<!-- FINAL -->
+<!-- 💜 FINAL -->
 <div class="container hidden" id="finalPage">
   <h1>💜</h1>
   <p>Marked this day as our anniversary 💜</p>
@@ -242,6 +246,7 @@
 
   function startSong(){
     document.getElementById("bgSong").play();
+    openPage('songPage');
   }
 
   function openPage(page){
