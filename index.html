@@ -139,6 +139,7 @@
 
 <body>
 
+<!-- 🎵 MUSIC -->
 <audio id="bgSong" loop>
   <source src="song.mp3">
 </audio>
@@ -158,7 +159,7 @@
 <!-- LOGIN -->
 <div class="container" id="loginPage">
   <h1>💜</h1>
-  <input type="password" id="password">
+  <input type="password" id="password" placeholder="Enter callsign">
   <button onclick="login()">Enter</button>
 </div>
 
@@ -166,6 +167,7 @@
 <div class="container hidden" id="greetPage">
   <h1 class="beat">Hi my love 💜</h1>
   <p>Do you want to see your gift?</p>
+
   <button onclick="goMenu()">Yes please 💜</button>
   <button id="noBtn" onmouseover="moveBtn()">No thanks</button>
 </div>
@@ -183,7 +185,7 @@
 <!-- SONG -->
 <div class="container hidden" id="songPage">
   <img src="songpic.jpg">
-  <button class="small-btn" onclick="goBack()">⟵</button>
+  <button class="small-btn" onclick="goBack()">⟵ Return</button>
 </div>
 
 <!-- PHOTOS -->
@@ -192,13 +194,13 @@
   <img src="pic4.jpg"><img src="pic5.jpg"><img src="pic6.jpg">
   <img src="pic7.jpg"><img src="pic8.jpg"><img src="pic9.jpg">
   <img src="pic10.jpg">
-  <button class="small-btn" onclick="goBack()">⟵</button>
+  <button class="small-btn" onclick="goBack()">⟵ Return</button>
 </div>
 
 <!-- LETTER -->
 <div class="container hidden" id="letter">
   <p id="typeText"></p>
-  <button class="small-btn" onclick="goBack()">⟵</button>
+  <button class="small-btn" onclick="goBack()">⟵ Return</button>
 </div>
 
 <!-- SPECIAL -->
@@ -209,6 +211,7 @@
 <!-- PIN -->
 <div class="container hidden" id="pinPage">
   <p id="pinDisplay">----</p>
+
   <div class="keypad">
     <button onclick="press(1)">1</button>
     <button onclick="press(2)">2</button>
@@ -228,23 +231,30 @@
 <div class="container hidden" id="finalPage">
   <h1 class="beat">💜</h1>
   <p>Marked this day as our anniversary 💜</p>
-  <button class="small-btn" onclick="goBack()">⟵</button>
+  <button class="small-btn" onclick="goBack()">⟵ Return</button>
 </div>
 
 <script>
 let pinInput="";
+let i=0;
 
 /* LOGIN */
 function login(){
-  if(password.value==="love"){
-    loginPage.classList.add("hidden");
-    greetPage.classList.remove("hidden");
+  if(document.getElementById("password").value==="love"){
+    document.getElementById("loginPage").classList.add("hidden");
+    document.getElementById("greetPage").classList.remove("hidden");
   }
 }
 
-/* RUN AWAY BUTTON */
+/* FIXED MENU BUTTON */
+function goMenu(){
+  document.querySelectorAll('.container').forEach(el=>el.classList.add("hidden"));
+  document.getElementById("menuPage").classList.remove("hidden");
+}
+
+/* RUN BUTTON */
 function moveBtn(){
-  let btn=noBtn;
+  let btn=document.getElementById("noBtn");
   btn.style.position="absolute";
   btn.style.top=Math.random()*300+"px";
   btn.style.left=Math.random()*300+"px";
@@ -252,7 +262,7 @@ function moveBtn(){
 
 /* MUSIC */
 function startSong(){
-  bgSong.play();
+  document.getElementById("bgSong").play();
   openPage('songPage');
 }
 
@@ -266,44 +276,43 @@ function openPage(page){
 
 function goBack(){
   document.querySelectorAll('.container').forEach(el=>el.classList.add("hidden"));
-  menuPage.classList.remove("hidden");
+  document.getElementById("menuPage").classList.remove("hidden");
 }
 
 /* PIN */
 function showPin(){
-  special.classList.add("hidden");
-  pinPage.classList.remove("hidden");
+  document.getElementById("special").classList.add("hidden");
+  document.getElementById("pinPage").classList.remove("hidden");
 }
 
 function press(num){
   if(pinInput.length<4){
     pinInput+=num;
-    pinDisplay.innerText=pinInput;
+    document.getElementById("pinDisplay").innerText=pinInput;
   }
   if(pinInput==="0409"){
-    pinPage.classList.add("hidden");
-    finalPage.classList.remove("hidden");
+    document.getElementById("pinPage").classList.add("hidden");
+    document.getElementById("finalPage").classList.remove("hidden");
     confetti();
   }
 }
 
 function clearPin(){
   pinInput="";
-  pinDisplay.innerText="----";
+  document.getElementById("pinDisplay").innerText="----";
 }
 
-/* 💌 TYPING */
+/* TYPING */
 const msg="You are my everything... I love you so much 💜";
-let i=0;
 function startTyping(){
   if(i<msg.length){
-    typeText.innerHTML+=msg.charAt(i);
+    document.getElementById("typeText").innerHTML+=msg.charAt(i);
     i++;
     setTimeout(startTyping,50);
   }
 }
 
-/* 🎉 CONFETTI */
+/* CONFETTI */
 function confetti(){
   for(let i=0;i<100;i++){
     let c=document.createElement("div");
@@ -316,7 +325,7 @@ function confetti(){
 
 /* SECRET */
 document.body.addEventListener("dblclick",()=>{
-  alert("I love you endlessly 💜🥺");
+  alert("You found my hidden love 💜🥺");
 });
 </script>
 
