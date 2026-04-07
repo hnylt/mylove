@@ -4,6 +4,7 @@
   <title>For You 💜</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- ICONS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
@@ -29,6 +30,11 @@
 
     h1 { color: #c084fc; }
 
+    @keyframes fadeIn {
+      from {opacity:0; transform:translateY(20px);}
+      to {opacity:1; transform:translateY(0);}
+    }
+
     button {
       padding: 12px;
       margin: 10px;
@@ -47,6 +53,19 @@
 
     .hidden { display: none; }
 
+    /* HEARTS */
+    .heart {
+      position: fixed;
+      color: red;
+      animation: floatUp 6s linear infinite;
+    }
+
+    @keyframes floatUp {
+      from { transform: translateY(100vh);}
+      to { transform: translateY(-10vh);}
+    }
+
+    /* CARDS */
     .grid {
       display: grid;
       grid-template-columns: repeat(2,1fr);
@@ -67,10 +86,41 @@
       box-shadow: 0 0 20px #a855f7;
     }
 
+    /* HEARTBEAT */
+    .beat {
+      animation: beat 1s infinite;
+    }
+
+    @keyframes beat {
+      0% { transform: scale(1);}
+      50% { transform: scale(1.2);}
+      100% { transform: scale(1);}
+    }
+
     img {
       width: 100%;
       border-radius: 15px;
       margin-top: 10px;
+    }
+
+    /* CONFETTI */
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: red;
+      animation: fall 3s linear infinite;
+    }
+
+    @keyframes fall {
+      from { transform: translateY(-10vh);}
+      to { transform: translateY(100vh);}
+    }
+
+    /* PIN */
+    .keypad button {
+      width: 60px;
+      height: 60px;
     }
   </style>
 </head>
@@ -81,6 +131,18 @@
   <source src="song.mp3">
 </audio>
 
+<script>
+/* HEARTS */
+setInterval(()=>{
+  let h=document.createElement("div");
+  h.className="heart";
+  h.innerHTML="❤️";
+  h.style.left=Math.random()*100+"vw";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),6000);
+},300);
+</script>
+
 <!-- LOGIN -->
 <div class="container" id="loginPage">
   <h1>💜</h1>
@@ -90,10 +152,10 @@
 
 <!-- GREETING -->
 <div class="container hidden" id="greetPage">
-  <h1>Hi my love 💜</h1>
+  <h1 class="beat">Hi my love 💜</h1>
   <p>Do you want to see your gift?</p>
   <button onclick="goMenu()">Yes please 💜</button>
-  <button onclick="alert('No choice 😭💜')">No thanks</button>
+  <button id="noBtn" onmouseover="moveBtn()">No thanks</button>
 </div>
 
 <!-- MENU -->
@@ -118,12 +180,10 @@
 <!-- PHOTOS -->
 <div class="container hidden" id="photos">
   <h1>JUST US! 💜</h1>
-
   <img src="pic1.jpg"><img src="pic2.jpg"><img src="pic3.jpg">
   <img src="pic4.jpg"><img src="pic5.jpg"><img src="pic6.jpg">
   <img src="pic7.jpg"><img src="pic8.jpg"><img src="pic9.jpg">
   <img src="pic10.jpg">
-
   <button class="small-btn" onclick="goBack()">⟵ Return</button>
 </div>
 
@@ -136,19 +196,16 @@
 
 <!-- SPECIAL -->
 <div class="container hidden" id="special">
-  <h1>🔐</h1>
   <p>Do you want to continue?</p>
   <button onclick="showPin()">Yes 💜</button>
 </div>
 
 <!-- PIN -->
 <div class="container hidden" id="pinPage">
-  <h1>Enter PIN 🔐</h1>
-  <p>Clue: today’s date 💜</p>
-
+  <p>Clue: today's date 💜</p>
   <p id="pinDisplay">----</p>
 
-  <div>
+  <div class="keypad">
     <button onclick="press(1)">1</button>
     <button onclick="press(2)">2</button>
     <button onclick="press(3)">3</button><br>
@@ -165,7 +222,7 @@
 
 <!-- FINAL -->
 <div class="container hidden" id="finalPage">
-  <h1>💜</h1>
+  <h1 class="beat">💜</h1>
   <p>Marked this day as our anniversary 💜</p>
   <button class="small-btn" onclick="goBack()">⟵ Return</button>
 </div>
@@ -174,6 +231,7 @@
 let pinInput="";
 let i=0;
 
+/* LOGIN */
 function login(){
   if(password.value==="love"){
     loginPage.classList.add("hidden");
@@ -181,16 +239,26 @@ function login(){
   }
 }
 
+/* MENU */
 function goMenu(){
   document.querySelectorAll('.container').forEach(el=>el.classList.add("hidden"));
   menuPage.classList.remove("hidden");
 }
 
+/* RUN BUTTON */
+function moveBtn(){
+  noBtn.style.position="absolute";
+  noBtn.style.top=Math.random()*300+"px";
+  noBtn.style.left=Math.random()*300+"px";
+}
+
+/* MUSIC */
 function startSong(){
-  document.getElementById("bgSong").play();
+  bgSong.play();
   openPage('songPage');
 }
 
+/* NAV */
 function openPage(page){
   document.querySelectorAll('.container').forEach(el=>el.classList.add("hidden"));
   document.getElementById(page).classList.remove("hidden");
@@ -203,6 +271,7 @@ function goBack(){
   menuPage.classList.remove("hidden");
 }
 
+/* PIN */
 function showPin(){
   special.classList.add("hidden");
   pinPage.classList.remove("hidden");
@@ -216,6 +285,7 @@ function press(num){
   if(pinInput==="0409"){
     pinPage.classList.add("hidden");
     finalPage.classList.remove("hidden");
+    confetti();
   }
 }
 
@@ -224,15 +294,37 @@ function clearPin(){
   pinDisplay.innerText="----";
 }
 
-/* typing */
+/* TYPING */
 const msg="You are my everything... I love you so much 💜";
 function startTyping(){
+  document.getElementById("typeText").innerHTML="";
+  i=0;
+  typeEffect();
+}
+
+function typeEffect(){
   if(i<msg.length){
     typeText.innerHTML+=msg.charAt(i);
     i++;
-    setTimeout(startTyping,50);
+    setTimeout(typeEffect,50);
   }
 }
+
+/* CONFETTI */
+function confetti(){
+  for(let i=0;i<100;i++){
+    let c=document.createElement("div");
+    c.className="confetti";
+    c.style.left=Math.random()*100+"vw";
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),3000);
+  }
+}
+
+/* SECRET */
+document.body.addEventListener("dblclick",()=>{
+  alert("You found my hidden love 💜🥺");
+});
 </script>
 
 </body>
