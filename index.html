@@ -4,11 +4,14 @@
   <title>For You 💜</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- ICONS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to bottom, #0f0c29, #302b63, #000);
+      background: radial-gradient(circle, #0f0c29, #1a0033, #000);
       color: white;
       text-align: center;
       overflow-x: hidden;
@@ -18,40 +21,43 @@
       max-width: 700px;
       margin: 50px auto;
       padding: 25px;
-      border-radius: 20px;
+      border-radius: 25px;
       background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 0 30px rgba(147,51,234,0.4);
-      animation: fadeIn 0.5s;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 40px rgba(147,51,234,0.5);
+      animation: fadeIn 0.6s;
+    }
+
+    h1 {
+      color: #c084fc;
+      text-shadow: 0 0 10px #a855f7;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px);}
-      to { opacity: 1; transform: translateY(0);}
+      from {opacity:0; transform:translateY(20px);}
+      to {opacity:1; transform:translateY(0);}
     }
-
-    h1 { color: #c084fc; }
 
     button {
       padding: 12px;
       margin: 10px;
-      border-radius: 10px;
+      border-radius: 12px;
       border: none;
-      background: #7c3aed;
+      background: linear-gradient(135deg, #7c3aed, #4c1d95);
       color: white;
       cursor: pointer;
       transition: 0.3s;
     }
 
     button:hover {
-      transform: scale(1.05);
-      background: #a78bfa;
+      transform: scale(1.07);
+      box-shadow: 0 0 20px #a855f7;
     }
 
     .small-btn {
-      padding: 6px 12px;
+      padding: 8px 16px;
       font-size: 12px;
-      background: #444;
+      background: linear-gradient(135deg, #7c3aed, #000);
     }
 
     .hidden { display: none; }
@@ -68,38 +74,44 @@
       to { transform: translateY(-10vh);}
     }
 
-    /* 🎁 GRID */
+    /* 🎁 CARDS */
     .grid {
       display: grid;
       grid-template-columns: repeat(2,1fr);
-      gap: 15px;
+      gap: 20px;
     }
 
     .card {
-      padding: 25px;
-      background: #1e1e2f;
-      border-radius: 15px;
+      padding: 30px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(8px);
       cursor: pointer;
-      transition: 0.3s;
+      transition: 0.4s;
+      font-size: 40px;
     }
 
     .card:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 25px #a855f7;
+      transform: scale(1.15) rotate(2deg);
+      box-shadow: 0 0 30px #a855f7;
     }
 
-    /* 🖼️ IMAGE STYLE */
+    /* 💓 HEARTBEAT */
+    .beat {
+      animation: beat 1s infinite;
+    }
+
+    @keyframes beat {
+      0% { transform: scale(1);}
+      50% { transform: scale(1.2);}
+      100% { transform: scale(1);}
+    }
+
     img {
       width: 100%;
       border-radius: 15px;
       margin-top: 10px;
-      opacity: 0;
-      transform: scale(0.9);
-      animation: showImg 1s forwards;
-    }
-
-    @keyframes showImg {
-      to { opacity: 1; transform: scale(1);}
+      animation: fadeIn 1s;
     }
 
     /* 🔢 PIN */
@@ -108,12 +120,25 @@
       height: 60px;
       font-size: 18px;
     }
+
+    /* 🎉 CONFETTI */
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: red;
+      animation: fall 3s linear infinite;
+    }
+
+    @keyframes fall {
+      from { transform: translateY(-10vh);}
+      to { transform: translateY(100vh);}
+    }
   </style>
 </head>
 
 <body>
 
-<!-- 🎵 BACKGROUND SONG -->
 <audio id="bgSong" loop>
   <source src="song.mp3">
 </audio>
@@ -133,80 +158,57 @@
 <!-- LOGIN -->
 <div class="container" id="loginPage">
   <h1>💜</h1>
-  <p>Enter our callsign</p>
   <input type="password" id="password">
   <button onclick="login()">Enter</button>
 </div>
 
 <!-- GREETING -->
 <div class="container hidden" id="greetPage">
-  <h1>Hi my love 💜</h1>
+  <h1 class="beat">Hi my love 💜</h1>
   <p>Do you want to see your gift?</p>
   <button onclick="goMenu()">Yes please 💜</button>
-  <button onclick="alert('No choice 😭💜')">No thanks</button>
+  <button id="noBtn" onmouseover="moveBtn()">No thanks</button>
 </div>
 
 <!-- MENU -->
 <div class="container hidden" id="menuPage">
-  <h1>These are for you ❤️</h1>
-
   <div class="grid">
-    <div class="card" onclick="startSong()">🎵 Our Song</div>
-    <div class="card" onclick="openPage('photos')">📸 Photos</div>
-    <div class="card" onclick="openPage('letter')">💌 Letter</div>
-    <div class="card" onclick="openPage('special')">🔐 Special</div>
+    <div class="card" onclick="startSong()"><i class="fa-solid fa-music"></i></div>
+    <div class="card" onclick="openPage('photos')"><i class="fa-solid fa-image"></i></div>
+    <div class="card" onclick="openPage('letter')"><i class="fa-solid fa-envelope"></i></div>
+    <div class="card" onclick="openPage('special')"><i class="fa-solid fa-lock"></i></div>
   </div>
 </div>
 
-<!-- 🎵 SONG PAGE -->
+<!-- SONG -->
 <div class="container hidden" id="songPage">
-  <h1>Our Song 💜</h1>
-
-  <!-- THIS IS YOUR IMAGE -->
   <img src="songpic.jpg">
-
-  <button class="small-btn" onclick="goBack()">Return</button>
+  <button class="small-btn" onclick="goBack()">⟵</button>
 </div>
 
-<!-- 📸 PHOTOS -->
+<!-- PHOTOS -->
 <div class="container hidden" id="photos">
-  <h1>Our Memories 💜</h1>
-
-  <img src="pic1.jpg">
-  <img src="pic2.jpg">
-  <img src="pic3.jpg">
-  <img src="pic4.jpg">
-  <img src="pic5.jpg">
-  <img src="pic6.jpg">
-  <img src="pic7.jpg">
-  <img src="pic8.jpg">
-  <img src="pic9.jpg">
+  <img src="pic1.jpg"><img src="pic2.jpg"><img src="pic3.jpg">
+  <img src="pic4.jpg"><img src="pic5.jpg"><img src="pic6.jpg">
+  <img src="pic7.jpg"><img src="pic8.jpg"><img src="pic9.jpg">
   <img src="pic10.jpg">
-
-  <button class="small-btn" onclick="goBack()">Return</button>
+  <button class="small-btn" onclick="goBack()">⟵</button>
 </div>
 
-<!-- 💌 LETTER -->
+<!-- LETTER -->
 <div class="container hidden" id="letter">
-  <h1>My Love Letter 💜</h1>
-  <p>Your message here 💜</p>
-  <button class="small-btn" onclick="goBack()">Return</button>
+  <p id="typeText"></p>
+  <button class="small-btn" onclick="goBack()">⟵</button>
 </div>
 
-<!-- 🔐 SPECIAL -->
+<!-- SPECIAL -->
 <div class="container hidden" id="special">
-  <h1>Special 💜</h1>
-  <p>Do you want to continue?</p>
-  <button onclick="showPin()">Yes 💜</button>
+  <button onclick="showPin()">Continue 💜</button>
 </div>
 
-<!-- 🔢 PIN -->
+<!-- PIN -->
 <div class="container hidden" id="pinPage">
-  <h1>Enter PIN 🔐</h1>
-  <p>Clue: today's date 💜</p>
-
   <p id="pinDisplay">----</p>
-
   <div class="keypad">
     <button onclick="press(1)">1</button>
     <button onclick="press(2)">2</button>
@@ -222,63 +224,100 @@
   </div>
 </div>
 
-<!-- 💜 FINAL -->
+<!-- FINAL -->
 <div class="container hidden" id="finalPage">
-  <h1>💜</h1>
+  <h1 class="beat">💜</h1>
   <p>Marked this day as our anniversary 💜</p>
-  <button class="small-btn" onclick="goBack()">Return</button>
+  <button class="small-btn" onclick="goBack()">⟵</button>
 </div>
 
 <script>
-  let pinInput="";
+let pinInput="";
 
-  function login(){
-    if(password.value==="love"){
-      loginPage.classList.add("hidden");
-      greetPage.classList.remove("hidden");
-    }
+/* LOGIN */
+function login(){
+  if(password.value==="love"){
+    loginPage.classList.add("hidden");
+    greetPage.classList.remove("hidden");
   }
+}
 
-  function goMenu(){
-    greetPage.classList.add("hidden");
-    menuPage.classList.remove("hidden");
-  }
+/* RUN AWAY BUTTON */
+function moveBtn(){
+  let btn=noBtn;
+  btn.style.position="absolute";
+  btn.style.top=Math.random()*300+"px";
+  btn.style.left=Math.random()*300+"px";
+}
 
-  function startSong(){
-    document.getElementById("bgSong").play();
-    openPage('songPage');
-  }
+/* MUSIC */
+function startSong(){
+  bgSong.play();
+  openPage('songPage');
+}
 
-  function openPage(page){
-    document.querySelectorAll('.container').forEach(el=>el.classList.add("hidden"));
-    document.getElementById(page).classList.remove("hidden");
-  }
+/* NAVIGATION */
+function openPage(page){
+  document.querySelectorAll('.container').forEach(el=>el.classList.add("hidden"));
+  document.getElementById(page).classList.remove("hidden");
 
-  function goBack(){
-    document.querySelectorAll('.container').forEach(el=>el.classList.add("hidden"));
-    menuPage.classList.remove("hidden");
-  }
+  if(page==="letter") startTyping();
+}
 
-  function showPin(){
-    special.classList.add("hidden");
-    pinPage.classList.remove("hidden");
-  }
+function goBack(){
+  document.querySelectorAll('.container').forEach(el=>el.classList.add("hidden"));
+  menuPage.classList.remove("hidden");
+}
 
-  function press(num){
-    if(pinInput.length<4){
-      pinInput+=num;
-      document.getElementById("pinDisplay").innerText=pinInput;
-    }
-    if(pinInput==="0409"){
-      pinPage.classList.add("hidden");
-      finalPage.classList.remove("hidden");
-    }
-  }
+/* PIN */
+function showPin(){
+  special.classList.add("hidden");
+  pinPage.classList.remove("hidden");
+}
 
-  function clearPin(){
-    pinInput="";
-    document.getElementById("pinDisplay").innerText="----";
+function press(num){
+  if(pinInput.length<4){
+    pinInput+=num;
+    pinDisplay.innerText=pinInput;
   }
+  if(pinInput==="0409"){
+    pinPage.classList.add("hidden");
+    finalPage.classList.remove("hidden");
+    confetti();
+  }
+}
+
+function clearPin(){
+  pinInput="";
+  pinDisplay.innerText="----";
+}
+
+/* 💌 TYPING */
+const msg="You are my everything... I love you so much 💜";
+let i=0;
+function startTyping(){
+  if(i<msg.length){
+    typeText.innerHTML+=msg.charAt(i);
+    i++;
+    setTimeout(startTyping,50);
+  }
+}
+
+/* 🎉 CONFETTI */
+function confetti(){
+  for(let i=0;i<100;i++){
+    let c=document.createElement("div");
+    c.className="confetti";
+    c.style.left=Math.random()*100+"vw";
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),3000);
+  }
+}
+
+/* SECRET */
+document.body.addEventListener("dblclick",()=>{
+  alert("I love you endlessly 💜🥺");
+});
 </script>
 
 </body>
