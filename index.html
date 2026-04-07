@@ -4,7 +4,6 @@
   <title>For You 💜</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- ICONS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
@@ -25,15 +24,9 @@
       background: rgba(0,0,0,0.7);
       backdrop-filter: blur(12px);
       box-shadow: 0 0 40px rgba(147,51,234,0.5);
-      animation: fadeIn 0.6s;
     }
 
     h1 { color: #c084fc; }
-
-    @keyframes fadeIn {
-      from {opacity:0; transform:translateY(20px);}
-      to {opacity:1; transform:translateY(0);}
-    }
 
     button {
       padding: 12px;
@@ -53,19 +46,6 @@
 
     .hidden { display: none; }
 
-    /* HEARTS */
-    .heart {
-      position: fixed;
-      color: red;
-      animation: floatUp 6s linear infinite;
-    }
-
-    @keyframes floatUp {
-      from { transform: translateY(100vh);}
-      to { transform: translateY(-10vh);}
-    }
-
-    /* CARDS */
     .grid {
       display: grid;
       grid-template-columns: repeat(2,1fr);
@@ -78,7 +58,6 @@
       background: rgba(255,255,255,0.05);
       font-size: 40px;
       cursor: pointer;
-      transition: 0.3s;
     }
 
     .card:hover {
@@ -86,7 +65,6 @@
       box-shadow: 0 0 20px #a855f7;
     }
 
-    /* HEARTBEAT */
     .beat {
       animation: beat 1s infinite;
     }
@@ -103,7 +81,17 @@
       margin-top: 10px;
     }
 
-    /* CONFETTI */
+    .heart {
+      position: fixed;
+      color: red;
+      animation: floatUp 6s linear infinite;
+    }
+
+    @keyframes floatUp {
+      from { transform: translateY(100vh);}
+      to { transform: translateY(-10vh);}
+    }
+
     .confetti {
       position: fixed;
       width: 10px;
@@ -116,12 +104,6 @@
       from { transform: translateY(-10vh);}
       to { transform: translateY(100vh);}
     }
-
-    /* PIN */
-    .keypad button {
-      width: 60px;
-      height: 60px;
-    }
   </style>
 </head>
 
@@ -132,7 +114,7 @@
 </audio>
 
 <script>
-/* HEARTS */
+/* floating hearts */
 setInterval(()=>{
   let h=document.createElement("div");
   h.className="heart";
@@ -191,17 +173,6 @@ setInterval(()=>{
 <div class="container hidden" id="letter">
   <h1>MY LSM FOR YOU! 💜</h1>
   <p id="typeText"></p>
-  <p>HI PALANGGA, MY LOVE, MY BABY, MY MAN, AND MY EVERYTHING 💗
-
-I just want to tell you how much I love you. Words can’t express how thankful I am to have you in my life. You’ve become the comfort I never knew I was searching for—the kind that makes life feel lighter and calmer.
-
-Thank you for being my safe place, for taking care of me with your “I know you can, but let me” and “kahit ano basta ikaw!” moments. Thank you for listening to all my random and sometimes nonsense topics, for showing patience when all I know is how to be angry, and for being my constant companion in everything.
-
-I’m sorry for the times I’ve hurt you. Please know that no matter what, I will never leave you. I will always be here for you. I’m willing to learn about you and understand you, piece by piece.
-
-I hope you’re not just a phase or an episode in my life. I hope you’re my forever—the one I get to love, keep, and choose every single day. Let’s build our dreams together, my love, hand in hand, heart in heart.
-
-I love you from the bottom of my heart, my one and only man! 💗</p>
   <button class="small-btn" onclick="goBack()">⟵ Return</button>
 </div>
 
@@ -216,19 +187,17 @@ I love you from the bottom of my heart, my one and only man! 💗</p>
   <p>Clue: today's date 💜</p>
   <p id="pinDisplay">----</p>
 
-  <div class="keypad">
-    <button onclick="press(1)">1</button>
-    <button onclick="press(2)">2</button>
-    <button onclick="press(3)">3</button><br>
-    <button onclick="press(4)">4</button>
-    <button onclick="press(5)">5</button>
-    <button onclick="press(6)">6</button><br>
-    <button onclick="press(7)">7</button>
-    <button onclick="press(8)">8</button>
-    <button onclick="press(9)">9</button><br>
-    <button onclick="clearPin()">C</button>
-    <button onclick="press(0)">0</button>
-  </div>
+  <button onclick="press(1)">1</button>
+  <button onclick="press(2)">2</button>
+  <button onclick="press(3)">3</button><br>
+  <button onclick="press(4)">4</button>
+  <button onclick="press(5)">5</button>
+  <button onclick="press(6)">6</button><br>
+  <button onclick="press(7)">7</button>
+  <button onclick="press(8)">8</button>
+  <button onclick="press(9)">9</button><br>
+  <button onclick="clearPin()">C</button>
+  <button onclick="press(0)">0</button>
 </div>
 
 <!-- FINAL -->
@@ -240,7 +209,7 @@ I love you from the bottom of my heart, my one and only man! 💗</p>
 
 <script>
 let pinInput="";
-let i=0;
+let tapCount=0;
 
 /* LOGIN */
 function login(){
@@ -305,8 +274,21 @@ function clearPin(){
   pinDisplay.innerText="----";
 }
 
-/* TYPING */
-const msg="You are my everything... I love you so much 💜";
+/* 💌 TYPING YOUR MESSAGE */
+const msg = `HI PALANGGA, MY LOVE, MY BABY, MY MAN, AND MY EVERYTHING 💗
+
+I just want to tell you how much I love you. Words can’t express how thankful I am to have you in my life. You’ve become the comfort I never knew I was searching for—the kind that makes life feel lighter and calmer.
+
+Thank you for being my safe place, for taking care of me with your “I know you can, but let me” and “kahit ano basta ikaw!” moments. Thank you for listening to all my random and sometimes nonsense topics, for showing patience when all I know is how to be angry, and for being my constant companion in everything.
+
+I’m sorry for the times I’ve hurt you. Please know that no matter what, I will never leave you. I will always be here for you. I’m willing to learn about you and understand you, piece by piece.
+
+I hope you’re not just a phase or an episode in my life. I hope you’re my forever—the one I get to love, keep, and choose every single day. Let’s build our dreams together, my love, hand in hand, heart in heart.
+
+I love you from the bottom of my heart, my one and only man! 💗`;
+
+let i=0;
+
 function startTyping(){
   document.getElementById("typeText").innerHTML="";
   i=0;
@@ -317,7 +299,7 @@ function typeEffect(){
   if(i<msg.length){
     typeText.innerHTML+=msg.charAt(i);
     i++;
-    setTimeout(typeEffect,50);
+    setTimeout(typeEffect,30);
   }
 }
 
@@ -332,9 +314,13 @@ function confetti(){
   }
 }
 
-/* SECRET */
-document.body.addEventListener("dblclick",()=>{
-  alert("You found my hidden love 💜🥺");
+/* 💖 TAP 3 SECRET */
+document.body.addEventListener("click",()=>{
+  tapCount++;
+  if(tapCount===3){
+    alert("I love you my love 💜🥺");
+    tapCount=0;
+  }
 });
 </script>
 
